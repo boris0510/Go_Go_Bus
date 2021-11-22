@@ -15,4 +15,7 @@
 body{
   background: #ECEEFF;
 }
+#app{
+  display: flex;
+}
 </style>
