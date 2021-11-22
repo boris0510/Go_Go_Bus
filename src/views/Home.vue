@@ -1,18 +1,36 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Go Go Bus</h1>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
-
 export default {
   name: 'Home',
-  components: {
-    HelloWorld,
+  mounted() {
+    // setTimeout(() => {
+    //   this.$router.push('/nearby');
+    // }, 2500);
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.home {
+  width: 100%;
+  height: 100vh;
+  background-image: url('../assets/img/index.svg');
+  background-size: cover;
+  background-position: center center;
+  h1 {
+    text-indent: 101%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1024px) {
+  .home {
+    background-image: url('../assets/img/index_mb.svg');
+  }
+}
+</style>
