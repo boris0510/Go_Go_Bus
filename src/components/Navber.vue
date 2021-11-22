@@ -43,6 +43,7 @@
       border-radius: 16px;
       &:hover {
         background: #2a4ac2;
+        transition: all 0.5s;
       }
       &.active {
         background: #2a4ac2;
