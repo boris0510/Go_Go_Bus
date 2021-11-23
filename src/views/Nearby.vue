@@ -2,9 +2,7 @@
   <Loading :active="isLoading" />
   <Navbar />
   <div class="nearby">
-    <div class="nearby-head">
-      <h1>BUS STOP | 附近站牌</h1>
-    </div>
+    <Title />
     <div class="nearby-content">
       <h2>附近的站牌</h2>
       <div class="distance">
@@ -40,12 +38,14 @@
 
 <script>
 import Navbar from '../components/Navbar.vue';
+import Title from '../components/Title.vue';
 import getAuthorizationHeader from '../tools/AuthorizationHeader';
 
 export default {
   name: 'Nearby',
   components: {
     Navbar,
+    Title,
   },
   data() {
     return {
@@ -117,13 +117,6 @@ export default {
 .nearby {
   width: calc(100% - 142px);
   padding: 55px 80px;
-  .nearby-head {
-    h1 {
-      font-weight: bold;
-      font-size: 26px;
-      color: #486ae8;
-    }
-  }
   .nearby-content {
     background: #ffffff;
     box-shadow: 2px 4px 7px rgba(196, 196, 196, 0.11);
@@ -173,7 +166,7 @@ export default {
       .distance-content {
         height: calc(100vh - 400px);
         overflow-y: scroll;
-        >h3 {
+        > h3 {
           font-weight: bold;
           font-size: 18px;
           color: #486ae8;
