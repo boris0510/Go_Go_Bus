@@ -5,7 +5,7 @@
     </div>
     <div class="navber-link">
       <router-link to="/nearby"><img src="../assets/img/icon_nearby.png" alt="" /></router-link>
-      <router-link to="/"><img src="../assets/img/icon_search.png" alt="" /></router-link>
+      <router-link to="/search"><img src="../assets/img/icon_search.png" alt="" /></router-link>
       <router-link to="/"><img src="../assets/img/icon_info.png" alt="" /></router-link>
     </div>
   </div>
