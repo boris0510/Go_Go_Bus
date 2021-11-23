@@ -1,5 +1,5 @@
 <template>
-  <Loading :active="isLoading" />
+  <Loading :active="isLoading" style="z-index: 9999" />
   <Navbar />
   <div class="search">
     <Title />
@@ -7,24 +7,36 @@
       <div class="search-left">
         <div class="search-meter">
           <p>Where are you going?</p>
-          <select v-model="currentCategory" @change="getBusData">
+          <select v-model="currentCategory" @change="getBusRoute">
             <option value="">請選擇縣市</option>
             <option :value="item.City" v-for="item in city" :key="item">
               {{ item.CityName }}
             </option>
           </select>
-          <select v-model="currentRoute">
+          <select v-model="currentRoute" @change="getBusData">
             <option value="">請選擇路線</option>
             <option :value="item.RouteName.Zh_tw" v-for="item in busRoute" :key="item">
               {{ item.RouteName.Zh_tw }}
             </option>
           </select>
-          <button type="button" @click="setBusData(currentRoute)">搜尋</button>
+          <button type="button" @click="setBusData">搜尋</button>
         </div>
         <div class="search-time">
           <div class="search-time-title">
-            <div class="search-time-common search-time-go active">往 公教住宅</div>
-            <div class="search-time-common search-time-back">往 中和</div>
+            <div
+              class="search-time-common search-time-go"
+              :class="{ active: status === 'go'}"
+              @click="setBusGoData"
+            >
+              往 {{ busGoName }}
+            </div>
+            <div
+              class="search-time-common search-time-back"
+              :class="{ active: status === 'back'}"
+              @click="setBusBackData"
+            >
+              往 {{ busBackName }}
+            </div>
           </div>
           <div class="search-time-content">
             <div class="search-time-txt">
@@ -82,9 +94,16 @@ export default {
       busSite: [],
       busLine: [],
       busRealTime: [],
+      busGoRealTime: [],
+      busBackRealTime: [],
       busEstimate: [],
+      busGoEstimate: [],
+      busBackEstimate: [],
       currentCategory: '',
       currentRoute: '',
+      busGoName: '',
+      busBackName: '',
+      status: 'go',
       isLoading: false,
     };
   },
@@ -125,46 +144,71 @@ export default {
         this.isLoading = false;
       }, 1000);
     },
-    getBusData() {
+    getBusRoute() {
       this.getData(
-        `https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/${this.currentCategory}?$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/${this.currentCategory}/${this.currentRoute}?$format=JSON`,
         'busRoute',
       );
+    },
+    getBusData() {
       this.getData(
-        `https://ptx.transportdata.tw/MOTC/v2/Bus/StopOfRoute/City/${this.currentCategory}?$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Bus/StopOfRoute/City/${this.currentCategory}/${this.currentRoute}?$format=JSON`,
         'busSite',
       );
       this.getData(
-        `https://ptx.transportdata.tw/MOTC/v2/Bus/Shape/City/${this.currentCategory}?$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Bus/Shape/City/${this.currentCategory}/${this.currentRoute}?$format=JSON`,
         'busLine',
       );
+      this.getTimelyBusData();
+    },
+    getTimelyBusData() {
       this.getData(
-        `https://ptx.transportdata.tw/MOTC/v2/Bus/RealTimeByFrequency/City/${this.currentCategory}?$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Bus/RealTimeByFrequency/City/${this.currentCategory}/${this.currentRoute}?$format=JSON`,
         'busRealTime',
       );
       this.getData(
-        `https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/${this.currentCategory}?$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/${this.currentCategory}/${this.currentRoute}?$format=JSON`,
         'busEstimate',
       );
     },
-    setBusData(name) {
-      const filterBusSite = this.busSite.filter((item) => item.RouteName.Zh_tw === name);
-      const filterBusLine = this.busLine.filter((item) => item.RouteName.Zh_tw === name);
-      const filterBusRealTime = this.busRealTime.filter((item) => item.RouteName.Zh_tw === name);
-      // const filterBusEstimate = this.busEstimate.filter((item) => item.RouteName.Zh_tw === name);
+    setBusData() {
+      const filterBusEstimate0 = this.busEstimate.filter((item) => item.Direction === 0);
+      this.busGoEstimate = filterBusEstimate0.sort((a, b) => b.StopSequence - a.StopSequence);
+      const filterBusEstimate1 = this.busEstimate.filter((item) => item.Direction === 1);
+      this.busBackEstimate = filterBusEstimate1.sort((a, b) => b.StopSequence - a.StopSequence);
+      this.busGoRealTime = this.busRealTime.filter((item) => item.Direction === 0);
+      this.busBackRealTime = this.busRealTime.filter((item) => item.Direction === 1);
+      this.busGoName = this.busBackEstimate[0].StopName.Zh_tw;
+      this.busBackName = this.busGoEstimate[0].StopName.Zh_tw;
+      if (this.status === 'go') {
+        this.setBusGoData();
+      } else if (this.status === 'back') {
+        this.setBusBackData();
+      }
+    },
+    setBusGoData() {
+      this.status = 'go';
       this.removeMarker();
-      this.renderSiteMarker(filterBusSite);
-      this.drawLine(filterBusLine[0].Geometry);
-      this.renderBusMarker(filterBusRealTime);
+      this.renderSiteMarker(this.busSite[0]);
+      this.drawLine(this.busLine[0].Geometry);
+      this.renderBusMarker(this.busGoRealTime);
+      // setTimeout(() => {
+      //   this.getTimelyBusData();
+      //   this.setBusData();
+      // }, 6000);
+    },
+    setBusBackData() {
+      this.status = 'back';
+      this.removeMarker();
+      this.renderSiteMarker(this.busSite[1]);
+      this.drawLine(this.busLine[1].Geometry);
+      this.renderBusMarker(this.busBackRealTime);
     },
     renderSiteMarker(data) {
-      data[0].Stops.forEach((item) => {
+      data.Stops.forEach((item) => {
         L.marker([item.StopPosition.PositionLat, item.StopPosition.PositionLon]).addTo(map);
       });
-      map.setView([
-        data[0].Stops[0].StopPosition.PositionLat,
-        data[0].Stops[0].StopPosition.PositionLon,
-      ]);
+      map.setView([data.Stops[0].StopPosition.PositionLat, data.Stops[0].StopPosition.PositionLon]);
     },
     renderBusMarker(data) {
       data.forEach((item) => {
@@ -172,10 +216,6 @@ export default {
           icon: redIcon,
         }).addTo(map);
       });
-      // map.setView([
-      //   data[0].Stops[0].StopPosition.PositionLat,
-      //   data[0].Stops[0].StopPosition.PositionLon,
-      // ]);
     },
     removeMarker() {
       map.eachLayer((layer) => {
@@ -217,17 +257,6 @@ export default {
         accessToken: process.env.VUE_APP_MAPKEY,
       },
     ).addTo(map);
-
-    const searchTimeGo = document.querySelector('.search-time-go');
-    const searchTimeBack = document.querySelector('.search-time-back');
-    searchTimeGo.addEventListener('click', () => {
-      searchTimeGo.classList.add('active');
-      searchTimeBack.classList.remove('active');
-    });
-    searchTimeBack.addEventListener('click', () => {
-      searchTimeGo.classList.remove('active');
-      searchTimeBack.classList.add('active');
-    });
   },
 };
 </script>
@@ -272,12 +301,11 @@ export default {
         margin-left: 30px;
         margin-right: 30px;
         margin-top: 30px;
-        &:focus{
+        &:focus {
           outline: none;
         }
       }
       button {
-        /* justify-self: center; */
         align-self: center;
         width: 275px;
         color: #ffffff;
@@ -285,6 +313,11 @@ export default {
         border-radius: 32px;
         padding: 9px 120px;
         margin-top: 35px;
+        cursor: pointer;
+        transition: all 0.5s;
+        &:hover {
+          background-color: #2a4ac3;
+        }
       }
     }
     .search-time {
@@ -298,13 +331,13 @@ export default {
           text-align: center;
           color: #ffffff;
           font-weight: bold;
-          font-size: 18px;
+          font-size: 15px;
           width: 50%;
           background: #bfcdff;
           padding: 12px 0;
           cursor: pointer;
+          transition: all 0.5s;
           &:hover {
-            transition: all 0.5s;
             background: #486ae8;
           }
         }
