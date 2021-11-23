@@ -11,6 +11,11 @@ const routes = [
     name: 'Nearby',
     component: () => import('../views/Nearby.vue'),
   },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/Search.vue'),
+  },
 ];
 
 const router = createRouter({
