@@ -33,12 +33,14 @@
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Navbar from '../components/Navbar.vue';
 import Title from '../components/Title.vue';
+import Footer from '../components/Footer.vue';
 import getAuthorizationHeader from '../tools/AuthorizationHeader';
 
 export default {
@@ -46,6 +48,7 @@ export default {
   components: {
     Navbar,
     Title,
+    Footer,
   },
   data() {
     return {
@@ -116,7 +119,7 @@ export default {
 <style lang="scss" scoped>
 .nearby {
   width: calc(100% - 142px);
-  padding: 55px 80px;
+  padding: 55px 80px 0 80px;
   .nearby-content {
     background: #ffffff;
     box-shadow: 2px 4px 7px rgba(196, 196, 196, 0.11);
@@ -166,6 +169,7 @@ export default {
       .distance-content {
         height: calc(100vh - 400px);
         overflow-y: scroll;
+        border: 1px solid #f3f3f3;
         > h3 {
           font-weight: bold;
           font-size: 18px;
@@ -177,6 +181,10 @@ export default {
           padding: 25px 0;
           padding-left: 70px;
           background: #f6f7ff;
+          margin-top: 3px;
+          &:first-child{
+            margin-top: 0;
+          }
           &:nth-child(2n) {
             background: #eceeff;
           }
