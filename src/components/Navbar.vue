@@ -41,9 +41,9 @@
       align-items: center;
       margin-bottom: 40px;
       border-radius: 16px;
+      transition: all 0.5s;
       &:hover {
         background: #2a4ac2;
-        transition: all 0.5s;
       }
       &.active {
         background: #2a4ac2;

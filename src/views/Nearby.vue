@@ -148,8 +148,8 @@ export default {
           background: #bfcdff;
           padding: 12px 0;
           cursor: pointer;
+          transition: all 0.5s;
           &:hover {
-            transition: all 0.5s;
             background: #486ae8;
           }
         }
