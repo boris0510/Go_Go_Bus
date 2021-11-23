@@ -1,6 +1,6 @@
 <template>
   <Loading :active="isLoading" />
-  <Navber />
+  <Navbar />
   <div class="nearby">
     <div class="nearby-head">
       <h1>BUS STOP | 附近站牌</h1>
@@ -15,6 +15,7 @@
           <div class="distance-common distance-300" @click="getNearbyBusSite(1000)">1000 m</div>
         </div>
         <div class="distance-content">
+          <h3 v-if="nearbyBusSite.length === 0">目前所在附近沒有公車站牌 !</h3>
           <div class="distance-txt" v-for="item in nearbyBusSite" :key="item.StationID">
             <h3>
               {{ item.StationName.Zh_tw }}
@@ -38,13 +39,13 @@
 </template>
 
 <script>
-import Navber from '../components/Navber.vue';
+import Navbar from '../components/Navbar.vue';
 import getAuthorizationHeader from '../tools/AuthorizationHeader';
 
 export default {
   name: 'Nearby',
   components: {
-    Navber,
+    Navbar,
   },
   data() {
     return {
@@ -172,6 +173,13 @@ export default {
       .distance-content {
         height: calc(100vh - 400px);
         overflow-y: scroll;
+        >h3 {
+          font-weight: bold;
+          font-size: 18px;
+          color: #486ae8;
+          padding: 25px 0;
+          padding-left: 70px;
+        }
         .distance-txt {
           padding: 25px 0;
           padding-left: 70px;
