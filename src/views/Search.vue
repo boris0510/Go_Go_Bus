@@ -19,20 +19,23 @@
               {{ item.RouteName.Zh_tw }}
             </option>
           </select>
-          <button type="button" @click="setBusData">搜尋</button>
+          <div class="search-meter-btn">
+            <button type="button" @click="setBusData">搜尋</button
+            ><button type="button" @click="resetBusData">重新整理</button>
+          </div>
         </div>
         <div class="search-time">
           <div class="search-time-title">
             <div
               class="search-time-common search-time-go"
-              :class="{ active: status === 'go'}"
+              :class="{ active: status === 'go' }"
               @click="setBusGoData"
             >
               往 {{ busGoName }}
             </div>
             <div
               class="search-time-common search-time-back"
-              :class="{ active: status === 'back'}"
+              :class="{ active: status === 'back' }"
               @click="setBusBackData"
             >
               往 {{ busBackName }}
@@ -173,9 +176,9 @@ export default {
     },
     setBusData() {
       const filterBusEstimate0 = this.busEstimate.filter((item) => item.Direction === 0);
-      this.busGoEstimate = filterBusEstimate0.sort((a, b) => b.StopSequence - a.StopSequence);
+      this.busGoEstimate = filterBusEstimate0.sort((a, b) => a.StopSequence - b.StopSequence);
       const filterBusEstimate1 = this.busEstimate.filter((item) => item.Direction === 1);
-      this.busBackEstimate = filterBusEstimate1.sort((a, b) => b.StopSequence - a.StopSequence);
+      this.busBackEstimate = filterBusEstimate1.sort((a, b) => a.StopSequence - b.StopSequence);
       this.busGoRealTime = this.busRealTime.filter((item) => item.Direction === 0);
       this.busBackRealTime = this.busRealTime.filter((item) => item.Direction === 1);
       this.busGoName = this.busBackEstimate[0].StopName.Zh_tw;
@@ -185,6 +188,11 @@ export default {
       } else if (this.status === 'back') {
         this.setBusBackData();
       }
+    },
+    resetBusData() {
+      if (this.currentCategory === '' || this.currentRoute === '') return;
+      this.getTimelyBusData();
+      this.setBusData();
     },
     setBusGoData() {
       this.status = 'go';
@@ -292,31 +300,34 @@ export default {
         font-size: 24px;
         color: #7d7d7d;
         padding-top: 40px;
-        margin-left: 30px;
+        margin-left: 20px;
       }
       select {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 15px;
         color: #363636;
-        margin-left: 30px;
-        margin-right: 30px;
+        margin-left: 20px;
+        margin-right: 20px;
         margin-top: 30px;
         &:focus {
           outline: none;
         }
       }
-      button {
-        align-self: center;
-        width: 275px;
-        color: #ffffff;
-        background: #486ae8;
-        border-radius: 32px;
-        padding: 9px 120px;
-        margin-top: 35px;
-        cursor: pointer;
-        transition: all 0.5s;
-        &:hover {
-          background-color: #2a4ac3;
+      .search-meter-btn {
+        display: flex;
+        justify-content: space-evenly;
+        button {
+          align-self: center;
+          color: #ffffff;
+          background: #486ae8;
+          border-radius: 32px;
+          padding: 9px 50px;
+          margin-top: 35px;
+          cursor: pointer;
+          transition: all 0.5s;
+          &:hover {
+            background-color: #2a4ac3;
+          }
         }
       }
     }
@@ -381,19 +392,19 @@ export default {
             font-weight: normal;
             font-size: 16px;
             color: #7d7d7d;
-            padding-left: 45px;
+            padding-left: 30px;
           }
           .time {
             font-weight: bold;
             font-size: 16px;
             color: #7d7d7d;
-            padding-left: 45px;
+            padding-left: 30px;
           }
           .car {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-left: 45px;
+            padding-left: 30px;
             font-weight: normal;
             font-size: 14px;
             color: #486ae8;
