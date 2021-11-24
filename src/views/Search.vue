@@ -242,9 +242,9 @@ export default {
       const wicket = new Wkt.Wkt();
       const geoTojson = wicket.read(geo).toJson();
       const styleLine = {
-        color: '#07B041',
-        weight: 5,
-        opacity: 0.5,
+        color: '#3356D6',
+        weight: 4,
+        opacity: 1,
       };
       lineLayer = L.geoJSON(geoTojson, {
         style: styleLine,
