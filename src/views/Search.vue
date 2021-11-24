@@ -63,17 +63,24 @@
 import L from 'leaflet';
 import Wkt from 'wicket';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
+
 import getAuthorizationHeader from '../tools/AuthorizationHeader';
 import Navbar from '../components/Navbar.vue';
 import Title from '../components/Title.vue';
 import Footer from '../components/Footer.vue';
+import userIconImg from '../assets/img/icon-user.png';
 
 let map = {};
 let lineLayer = {};
+const userIcon = new L.Icon({
+  iconUrl: userIconImg,
+  iconSize: [46, 46],
+  iconAnchor: [20, 0],
+});
 const redIcon = new L.Icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41],
+  iconSize: [25, 32],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -119,7 +126,7 @@ export default {
             this.userLocation.latitude = position.coords.latitude;
             map.setView([this.userLocation.latitude, this.userLocation.longitude]);
             map.panTo([this.userLocation.latitude, this.userLocation.longitude]);
-            L.marker([this.userLocation.latitude, this.userLocation.longitude])
+            L.marker([this.userLocation.latitude, this.userLocation.longitude], { icon: userIcon })
               .addTo(map)
               .bindPopup('您的位置')
               .openPopup();
@@ -192,7 +199,9 @@ export default {
     resetBusData() {
       if (this.currentCategory === '' || this.currentRoute === '') return;
       this.getTimelyBusData();
-      this.setBusData();
+      setTimeout(() => {
+        this.setBusData();
+      }, 1000);
     },
     setBusGoData() {
       this.status = 'go';
@@ -200,10 +209,6 @@ export default {
       this.renderSiteMarker(this.busSite[0]);
       this.drawLine(this.busLine[0].Geometry);
       this.renderBusMarker(this.busGoRealTime);
-      // setTimeout(() => {
-      //   this.getTimelyBusData();
-      //   this.setBusData();
-      // }, 6000);
     },
     setBusBackData() {
       this.status = 'back';
