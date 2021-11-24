@@ -8,9 +8,9 @@
 export default {
   name: 'Home',
   mounted() {
-    // setTimeout(() => {
-    //   this.$router.push('/nearby');
-    // }, 2500);
+    setTimeout(() => {
+      this.$router.push('/nearby');
+    }, 2500);
   },
 };
 </script>
