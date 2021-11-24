@@ -327,7 +327,7 @@ export default {
     display: flex;
   }
   .search-left {
-    width: 30%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     margin-right: 30px;
@@ -463,7 +463,7 @@ export default {
     }
   }
   .search-right {
-    width: 70%;
+    width: 60%;
   }
 }
 </style>
