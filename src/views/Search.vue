@@ -42,12 +42,36 @@
             </div>
           </div>
           <div class="search-time-content">
-            <div class="search-time-txt">
-              <img src="../assets/img/icon-down.png" alt="down" />
-              <h3>中和保養廠</h3>
-              <p class="time">未發車</p>
-              <div class="car"><img src="../assets/img/icon-car.png" alt="car" />FAA-073</div>
-            </div>
+            <template v-if="status === 'go'">
+              <div class="search-time-txt" v-for="item in busGoEstimate" :key="item">
+                <img src="../assets/img/icon-down.png" alt="down" />
+                <h3>{{ item.StopName.Zh_tw }}</h3>
+                <p class="time" v-if="item.StopStatus === 0">
+                  {{ Math.round(item.EstimateTime / 60) }} 分
+                </p>
+                <p class="time" v-if="item.StopStatus === 1">尚未發車</p>
+                <div class="car"  v-if="item.StopStatus === 0">
+                  <img src="../assets/img/icon-car.png" alt="car" />{{ item.PlateNumb }}
+                </div>
+                <div class="car" v-if="item.StopStatus === 1">
+                </div>
+              </div>
+            </template>
+            <template v-if="status === 'back'">
+              <div class="search-time-txt" v-for="item in busBackEstimate" :key="item">
+                <img src="../assets/img/icon-down.png" alt="down" />
+                <h3>{{ item.StopName.Zh_tw }}</h3>
+                <p class="time" v-if="item.StopStatus === 0">
+                  {{ Math.round(item.EstimateTime / 60) }} 分
+                </p>
+                <p class="time" v-if="item.StopStatus === 1">尚未發車</p>
+                <div class="car" v-if="item.StopStatus === 0">
+                  <img src="../assets/img/icon-car.png" alt="car" />{{ item.PlateNumb }}
+                </div>
+                <div class="car" v-if="item.StopStatus === 1">
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -78,9 +102,9 @@ const userIcon = new L.Icon({
   iconAnchor: [20, 0],
 });
 const redIcon = new L.Icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 32],
+  iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -223,16 +247,24 @@ export default {
       data.Stops.forEach((item, index) => {
         L.marker([item.StopPosition.PositionLat, item.StopPosition.PositionLon])
           .addTo(map)
-          .bindTooltip(`${index + 1}. ${data.Stops[index].StopName.Zh_tw}`, { permanent: true, direction: 'top', offset: [-15, -10] })
+          .bindTooltip(`${index + 1}. ${data.Stops[index].StopName.Zh_tw}`, {
+            permanent: true,
+            direction: 'top',
+            offset: [-15, -10],
+          })
           .openTooltip();
       });
-      map.setView([data.Stops[0].StopPosition.PositionLat, data.Stops[0].StopPosition.PositionLon]);
     },
     renderBusMarker(data) {
       data.forEach((item) => {
-        L.marker([item.BusPosition.PositionLat, item.BusPosition.PositionLon], {
-          icon: redIcon,
-        }).addTo(map);
+        L.marker([item.BusPosition.PositionLat, item.BusPosition.PositionLon], { icon: redIcon })
+          .addTo(map)
+          .bindTooltip(`${item.PlateNumb}`, {
+            permanent: true,
+            direction: 'bottom',
+            offset: [0, 0],
+          })
+          .openTooltip();
       });
     },
     removeMarker() {
@@ -389,9 +421,9 @@ export default {
         .search-time-txt {
           background: #f2f2f2;
           display: flex;
-          justify-content: center;
+          justify-content: space-evenly;
           align-items: center;
-          padding: 10px 0;
+          padding: 10px 0px;
           &:first-child {
             margin-top: 0;
           }
@@ -399,27 +431,29 @@ export default {
             background: #fefcfc;
           }
           h3 {
+            width: 235px;
+            text-align: center;
             font-weight: normal;
             font-size: 16px;
             color: #7d7d7d;
-            padding-left: 30px;
           }
           .time {
+            width: 65px;
+            text-align: center;
             font-weight: bold;
             font-size: 16px;
             color: #7d7d7d;
-            padding-left: 30px;
           }
           .car {
+            width: 85px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-left: 30px;
             font-weight: normal;
             font-size: 14px;
             color: #486ae8;
             img {
-              margin-right: 15px;
+              margin-right: 10px;
             }
           }
         }
