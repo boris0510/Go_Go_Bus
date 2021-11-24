@@ -231,6 +231,7 @@ export default {
     },
     setBusGoData() {
       this.status = 'go';
+      if (this.currentCategory === '' || this.currentRoute === '') return;
       this.removeMarker();
       this.renderSiteMarker(this.busSite[0]);
       this.drawLine(this.busLine[0].Geometry);
@@ -238,6 +239,7 @@ export default {
     },
     setBusBackData() {
       this.status = 'back';
+      if (this.currentCategory === '' || this.currentRoute === '') return;
       this.removeMarker();
       this.renderSiteMarker(this.busSite[1]);
       this.drawLine(this.busLine[1].Geometry);
