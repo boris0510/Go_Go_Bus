@@ -126,9 +126,11 @@ export default {
             this.userLocation.latitude = position.coords.latitude;
             map.setView([this.userLocation.latitude, this.userLocation.longitude]);
             map.panTo([this.userLocation.latitude, this.userLocation.longitude]);
-            L.marker([this.userLocation.latitude, this.userLocation.longitude], { icon: userIcon })
+            L.marker([this.userLocation.latitude, this.userLocation.longitude], {
+              icon: userIcon,
+            })
               .addTo(map)
-              .bindPopup('您的位置')
+              .bindPopup('您的位置', { closeButton: false })
               .openPopup();
           },
           (e) => {
@@ -218,8 +220,11 @@ export default {
       this.renderBusMarker(this.busBackRealTime);
     },
     renderSiteMarker(data) {
-      data.Stops.forEach((item) => {
-        L.marker([item.StopPosition.PositionLat, item.StopPosition.PositionLon]).addTo(map);
+      data.Stops.forEach((item, index) => {
+        L.marker([item.StopPosition.PositionLat, item.StopPosition.PositionLon])
+          .addTo(map)
+          .bindTooltip(`${index + 1}. ${data.Stops[index].StopName.Zh_tw}`, { permanent: true, direction: 'top', offset: [-15, -10] })
+          .openTooltip();
       });
       map.setView([data.Stops[0].StopPosition.PositionLat, data.Stops[0].StopPosition.PositionLon]);
     },
