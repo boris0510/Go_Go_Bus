@@ -251,8 +251,8 @@ export default {
           .addTo(map)
           .bindTooltip(`${index + 1}. ${data.Stops[index].StopName.Zh_tw}`, {
             permanent: true,
-            direction: 'top',
-            offset: [-15, -10],
+            direction: 'right',
+            offset: [0, 5],
           })
           .openTooltip();
       });
@@ -263,8 +263,8 @@ export default {
           .addTo(map)
           .bindTooltip(`${item.PlateNumb}`, {
             permanent: true,
-            direction: 'bottom',
-            offset: [0, 0],
+            direction: 'left',
+            offset: [-10, -20],
           })
           .openTooltip();
       });
