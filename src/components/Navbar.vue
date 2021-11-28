@@ -1,9 +1,9 @@
 <template>
-  <div class="navber">
-    <div class="navber-logo">
+  <div class="navbar">
+    <div class="navbar-logo">
       <a href="#" to="/"><img src="../assets/img/logo.png" alt="logo" /></a>
     </div>
-    <div class="navber-link">
+    <div class="navbar-link">
       <router-link to="/nearby"><img src="../assets/img/icon_nearby.png" alt="" /></router-link>
       <router-link to="/search"><img src="../assets/img/icon_search.png" alt="" /></router-link>
       <router-link to="/news"><img src="../assets/img/icon_info.png" alt="" /></router-link>
@@ -12,13 +12,13 @@
 </template>
 
 <style lang="scss" scoped>
-.navber {
+.navbar {
   width: 142px;
   height: 100vh;
   background: #486ae8;
   box-shadow: 3px 2px 6px rgba(121, 121, 121, 0.25);
   border-radius: 0px 16px 16px 0px;
-  .navber-logo {
+  .navbar-logo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,7 +26,7 @@
     padding-bottom: 45px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   }
-  .navber-link {
+  .navbar-link {
     display: flex;
     flex-direction: column;
     align-items: center;
