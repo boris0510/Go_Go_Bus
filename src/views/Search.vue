@@ -46,30 +46,70 @@
               <div class="search-time-txt" v-for="item in busGoEstimate" :key="item">
                 <img src="../assets/img/icon-down.png" alt="down" />
                 <h3>{{ item.StopName.Zh_tw }}</h3>
-                <p class="time" v-if="item.StopStatus === 0">
+                <p
+                  class="time"
+                  v-if="item.StopStatus === 0 && Math.round(item.EstimateTime / 60) >= 2"
+                >
                   {{ Math.round(item.EstimateTime / 60) }} 分
                 </p>
+                <p
+                  class="time"
+                  v-if="
+                    item.StopStatus === 0 &&
+                    Math.round(item.EstimateTime / 60) <= 1 &&
+                    Math.round(item.EstimateTime / 60) > 0
+                  "
+                  style="color: #486AE8"
+                >
+                  即將進站
+                </p>
+                <p
+                  class="time"
+                  v-if="item.StopStatus === 0 && Math.round(item.EstimateTime / 60) == 0"
+                  style="color: #ffbd37"
+                >
+                  進站中
+                </p>
                 <p class="time" v-if="item.StopStatus === 1">尚未發車</p>
-                <div class="car"  v-if="item.StopStatus === 0">
+                <div class="car" v-if="item.StopStatus === 0">
                   <img src="../assets/img/icon-car.png" alt="car" />{{ item.PlateNumb }}
                 </div>
-                <div class="car" v-if="item.StopStatus === 1">
-                </div>
+                <div class="car" v-if="item.StopStatus === 1"></div>
               </div>
             </template>
             <template v-if="status === 'back'">
               <div class="search-time-txt" v-for="item in busBackEstimate" :key="item">
                 <img src="../assets/img/icon-down.png" alt="down" />
                 <h3>{{ item.StopName.Zh_tw }}</h3>
-                <p class="time" v-if="item.StopStatus === 0">
+                <p
+                  class="time"
+                  v-if="item.StopStatus === 0 && Math.round(item.EstimateTime / 60) >= 2"
+                >
                   {{ Math.round(item.EstimateTime / 60) }} 分
+                </p>
+                <p
+                  class="time"
+                  v-if="
+                    item.StopStatus === 0 &&
+                    Math.round(item.EstimateTime / 60) <= 1 &&
+                    Math.round(item.EstimateTime / 60) > 0
+                  "
+                  style="color: #486AE8"
+                >
+                  即將進站
+                </p>
+                <p
+                  class="time"
+                  v-if="item.StopStatus === 0 && Math.round(item.EstimateTime / 60) == 0"
+                  style="color: #ffbd37"
+                >
+                  進站中
                 </p>
                 <p class="time" v-if="item.StopStatus === 1">尚未發車</p>
                 <div class="car" v-if="item.StopStatus === 0">
                   <img src="../assets/img/icon-car.png" alt="car" />{{ item.PlateNumb }}
                 </div>
-                <div class="car" v-if="item.StopStatus === 1">
-                </div>
+                <div class="car" v-if="item.StopStatus === 1"></div>
               </div>
             </template>
           </div>
